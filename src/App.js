@@ -5,13 +5,16 @@ import './App.css';
 export default function App() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [showWarning, setShowWarning] = useState(false);
   const [fullName, setFullName] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (firstName && lastName) {
-      const fullName = `${firstName} ${lastName}`;
-      setFullName(fullName);
+    if (!firstName || !lastName) {
+      setShowWarning(true);
+    } else {
+      setShowWarning(false);
+      setFullName(`${firstName} ${lastName}`);
     }
   };
 
@@ -25,6 +28,7 @@ export default function App() {
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
+            required
           />
         </label>
         <br />
@@ -34,14 +38,20 @@ export default function App() {
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
+            required
           />
         </label>
         <br />
-        <button type="submit" disabled={!firstName || !lastName}>
-          Submit
-        </button>
+        <button type="submit">Submit</button>
       </form>
-      {fullName && <p>Full Name: {fullName}</p>}
+      {showWarning && (
+        <div style={{ color: 'red', marginTop: '10px' }}>
+          Please fill out both fields.
+        </div>
+      )}
+      {fullName && (
+        <p>Full Name: {fullName}</p>
+      )}
     </div>
   );
 }
